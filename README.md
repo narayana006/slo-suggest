@@ -1,4 +1,4 @@
-# slo-from-logs
+# slo-suggest
 
 Propose SLIs and SLOs from your existing access logs and Prometheus or Datadog metrics, and generate OpenSLO YAML plus burn-rate alerts.
 
@@ -38,7 +38,7 @@ Unticked items are not built yet.
 This is the intended interface, shown so you can judge the design. **It does not work yet**, and names may change before the first release.
 
 ```bash
-slo-from-logs suggest --logs access.log --prometheus http://prom:9090 --service checkout
+slo-suggest suggest --logs access.log --prometheus http://prom:9090 --service checkout
 ```
 
 ## Contributing
