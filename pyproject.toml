@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "slo-suggest"
+version = "0.1.0"
+description = "Propose SLIs and SLO targets from access logs and generate OpenSLO YAML plus burn-rate alert rules."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Narayana Vemburaj" }]
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest", "pyyaml"]
+
+[project.urls]
+Homepage = "https://github.com/narayana006/slo-suggest"
+
+[project.scripts]
+slo-suggest = "slo_suggest.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
