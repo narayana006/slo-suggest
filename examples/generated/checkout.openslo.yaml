@@ -1,0 +1,63 @@
+apiVersion: openslo/v1
+kind: SLO
+metadata:
+  name: checkout-availability
+  displayName: "checkout availability"
+spec:
+  description: "Share of checkout requests that do not fail with a 5xx status."
+  service: "checkout"
+  indicator:
+    metadata:
+      name: checkout-availability-sli
+    spec:
+      ratioMetric:
+        counter: true
+        good:
+          metricSource:
+            type: Prometheus
+            spec:
+              query: "sum(http_requests_total{service=\"checkout\",code!~\"5..\"})"
+        total:
+          metricSource:
+            type: Prometheus
+            spec:
+              query: "sum(http_requests_total{service=\"checkout\"})"
+  timeWindow:
+    - duration: 30d
+      isRolling: true
+  budgetingMethod: Occurrences
+  objectives:
+    - displayName: "99.9% availability"
+      target: 0.999
+---
+apiVersion: openslo/v1
+kind: SLO
+metadata:
+  name: checkout-latency
+  displayName: "checkout latency"
+spec:
+  description: "Share of checkout requests answered within 500ms."
+  service: "checkout"
+  indicator:
+    metadata:
+      name: checkout-latency-sli
+    spec:
+      ratioMetric:
+        counter: true
+        good:
+          metricSource:
+            type: Prometheus
+            spec:
+              query: "sum(http_request_duration_seconds_bucket{service=\"checkout\",le=\"0.5\"})"
+        total:
+          metricSource:
+            type: Prometheus
+            spec:
+              query: "sum(http_request_duration_seconds_count{service=\"checkout\"})"
+  timeWindow:
+    - duration: 30d
+      isRolling: true
+  budgetingMethod: Occurrences
+  objectives:
+    - displayName: "99% latency"
+      target: 0.99

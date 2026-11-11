@@ -1,0 +1,47 @@
+groups:
+  - name: checkout-availability-burn-rate
+    rules:
+      - alert: CheckoutAvailabilityBurnRate1h
+        expr: "(sum(rate(http_requests_total{service=\"checkout\",code=~\"5..\"}[1h])) / sum(rate(http_requests_total{service=\"checkout\"}[1h]))) > 0.0144 and (sum(rate(http_requests_total{service=\"checkout\",code=~\"5..\"}[5m])) / sum(rate(http_requests_total{service=\"checkout\"}[5m]))) > 0.0144"
+        labels:
+          severity: page
+          slo: checkout-availability
+        annotations:
+          summary: "checkout availability is burning its error budget at more than 14.4x the sustainable rate (windows 1h and 5m)"
+      - alert: CheckoutAvailabilityBurnRate6h
+        expr: "(sum(rate(http_requests_total{service=\"checkout\",code=~\"5..\"}[6h])) / sum(rate(http_requests_total{service=\"checkout\"}[6h]))) > 0.006 and (sum(rate(http_requests_total{service=\"checkout\",code=~\"5..\"}[30m])) / sum(rate(http_requests_total{service=\"checkout\"}[30m]))) > 0.006"
+        labels:
+          severity: page
+          slo: checkout-availability
+        annotations:
+          summary: "checkout availability is burning its error budget at more than 6x the sustainable rate (windows 6h and 30m)"
+      - alert: CheckoutAvailabilityBurnRate3d
+        expr: "(sum(rate(http_requests_total{service=\"checkout\",code=~\"5..\"}[3d])) / sum(rate(http_requests_total{service=\"checkout\"}[3d]))) > 0.001 and (sum(rate(http_requests_total{service=\"checkout\",code=~\"5..\"}[6h])) / sum(rate(http_requests_total{service=\"checkout\"}[6h]))) > 0.001"
+        labels:
+          severity: ticket
+          slo: checkout-availability
+        annotations:
+          summary: "checkout availability is burning its error budget at more than 1x the sustainable rate (windows 3d and 6h)"
+  - name: checkout-latency-burn-rate
+    rules:
+      - alert: CheckoutLatencyBurnRate1h
+        expr: "(1 - sum(rate(http_request_duration_seconds_bucket{service=\"checkout\",le=\"0.5\"}[1h])) / sum(rate(http_request_duration_seconds_count{service=\"checkout\"}[1h]))) > 0.144 and (1 - sum(rate(http_request_duration_seconds_bucket{service=\"checkout\",le=\"0.5\"}[5m])) / sum(rate(http_request_duration_seconds_count{service=\"checkout\"}[5m]))) > 0.144"
+        labels:
+          severity: page
+          slo: checkout-latency
+        annotations:
+          summary: "checkout latency is burning its error budget at more than 14.4x the sustainable rate (windows 1h and 5m)"
+      - alert: CheckoutLatencyBurnRate6h
+        expr: "(1 - sum(rate(http_request_duration_seconds_bucket{service=\"checkout\",le=\"0.5\"}[6h])) / sum(rate(http_request_duration_seconds_count{service=\"checkout\"}[6h]))) > 0.06 and (1 - sum(rate(http_request_duration_seconds_bucket{service=\"checkout\",le=\"0.5\"}[30m])) / sum(rate(http_request_duration_seconds_count{service=\"checkout\"}[30m]))) > 0.06"
+        labels:
+          severity: page
+          slo: checkout-latency
+        annotations:
+          summary: "checkout latency is burning its error budget at more than 6x the sustainable rate (windows 6h and 30m)"
+      - alert: CheckoutLatencyBurnRate3d
+        expr: "(1 - sum(rate(http_request_duration_seconds_bucket{service=\"checkout\",le=\"0.5\"}[3d])) / sum(rate(http_request_duration_seconds_count{service=\"checkout\"}[3d]))) > 0.01 and (1 - sum(rate(http_request_duration_seconds_bucket{service=\"checkout\",le=\"0.5\"}[6h])) / sum(rate(http_request_duration_seconds_count{service=\"checkout\"}[6h]))) > 0.01"
+        labels:
+          severity: ticket
+          slo: checkout-latency
+        annotations:
+          summary: "checkout latency is burning its error budget at more than 1x the sustainable rate (windows 3d and 6h)"
